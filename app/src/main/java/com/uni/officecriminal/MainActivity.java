@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment listFragment =  CriminalListFragment.newInstance();
         Fragment detailFragment = CriminalDetailFragment.newInstance();
         transaction.replace(R.id.fragment_list, listFragment);
-        transaction.replace(R.id.fragment_details, detailFragment);
+        if(findViewById(R.id.fragment_details) != null)
+            transaction.replace(R.id.fragment_details, detailFragment);
         transaction.commit();
     }
 }
