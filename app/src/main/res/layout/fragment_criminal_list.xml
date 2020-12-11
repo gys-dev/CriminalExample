@@ -6,9 +6,10 @@
     tools:context=".CriminalListFragment"
     android:background="@color/colorAccent">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="List Fragment" />
+        android:id="@+id/rclCriminals"
+        ></androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>
