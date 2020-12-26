@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.uni.officecriminal.model.Criminal;
+import com.uni.officecriminal.model.CriminalEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class CriminalAdapter extends RecyclerView.Adapter<CriminalAdapter.ViewHolder> {
 
@@ -35,13 +38,18 @@ public class CriminalAdapter extends RecyclerView.Adapter<CriminalAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         if(j > 20) return;
         Criminal criminal = criminals.get(position);
         holder.mTvTile.setText(criminal.getTitle());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        String date = simpleDateFormat.format(criminal.getCreationDate());
-        holder.mTvDate.setText(date);
+        holder.mTvDate.setText(criminal.getDescription());
+        holder.containView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Criminal criminal = criminals.get(position);
+                EventBus.getDefault().post(new CriminalEvent(criminal.getTitle(), criminal.getDescription()));
+            }
+        });
         Log.d("CRIMINAL", "onBindViewHolder " + ++j);
     }
 
@@ -53,11 +61,13 @@ public class CriminalAdapter extends RecyclerView.Adapter<CriminalAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mTvTile;
         public final TextView mTvDate;
+        public final View containView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTvTile = itemView.findViewById(R.id.item_criminal_tv_title);
             mTvDate = itemView.findViewById(R.id.item_criminal_tv_date);
+            containView = itemView.findViewById(R.id.contentView);
         }
     }
 }

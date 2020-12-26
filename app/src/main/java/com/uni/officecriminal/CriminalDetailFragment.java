@@ -7,6 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.uni.officecriminal.model.CriminalEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 /**
@@ -14,19 +21,35 @@ import android.view.ViewGroup;
  */
 public class CriminalDetailFragment extends Fragment {
 
+    private TextView contentTextView;
     public CriminalDetailFragment() {
-        // Required empty public constructor
     }
 
     public static Fragment newInstance() {
+
         return new CriminalDetailFragment();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(CriminalEvent event) {
+        contentTextView.setText(event.getDescription());
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_criminal_detail, container, false);
+        View view =  inflater.inflate(R.layout.fragment_criminal_detail, container, false);
+        contentTextView = (TextView) view.findViewById(R.id.contentTV);
+
+        return view;
     }
 }
